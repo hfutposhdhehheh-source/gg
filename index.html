@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Audio Suite & Booster</title>
+    <style>
+        :root {
+            --bg-color: #07090e;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --accent: #00f2fe;
+            --accent-secondary: #4facfe;
+            --danger: #ef4444;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Upload Section */
+        .upload-box {
+            border: 2px dashed var(--card-border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+            background: rgba(17, 24, 39, 0.5);
+        }
+
+        .upload-box:active {
+            border-color: var(--accent);
+            background: rgba(0, 242, 254, 0.05);
+        }
+
+        .upload-box input { display: none; }
+        .file-name {
+            font-size: 13px;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 4px;
+        }
+
+        /* Player & Visualizer */
+        audio {
+            width: 100%;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            height: 40px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 90px;
+            background-color: #030712;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            margin-bottom: 16px;
+        }
+
+        /* Sections & Cards */
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 16px 0 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-panel {
+            background: rgba(3, 7, 18, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+
+        .control-row {
+            margin-bottom: 12px;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .control-label span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Sliders */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: #374151;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        /* Presets Buttons */
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .btn-preset {
+            background: #1f2937;
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 4px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-preset.active {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        }
+
+        /* Equalizer Sliders Horizontal (Mobile Optimized) */
+        .eq-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .eq-band {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .eq-band span {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .eq-band input[type="range"] {
+            writing-mode: bt-lr; /* IE */
+            -webkit-appearance: slider-vertical;
+            width: 6px;
+            height: 80px;
+        }
+
+        /* Action Buttons (Export, Battery) */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+            color: #07090e;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+
+        .btn-action:active { opacity: 0.8; }
+
+        .btn-secondary {
+            background: #1f2937;
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>PRO AUDIO SUITE</h1>
+            <p>High-Performance Web Audio Booster & EQ</p>
+        </div>
+
+        <!-- Upload -->
+        <div class="upload-box" onclick="document.getElementById('audioFile').click()">
+            <div style="font-size: 14px; font-weight: 600; color: var(--accent);">📁 เลือกไฟล์เพลง (MP3, WAV)</div>
+            <div id="fileName" class="file-name">ยังไม่ได้เลือกไฟล์</div>
+            <input type="file" id="audioFile" accept="audio/*">
+        </div>
+
+        <audio id="audioPlayer" controls crossorigin="anonymous"></audio>
+
+        <canvas id="visualizer"></canvas>
+
+        <!-- Presets -->
+        <div class="section-title">Sound Presets</div>
+        <div class="preset-grid">
+            <button class="btn-preset active" onclick="setPreset('flat')">Flat</button>
+            <button class="btn-preset" onclick="setPreset('bass')">Bass Boost</button>
+            <button class="btn-preset" onclick="setPreset('edm')">EDM</button>
+            <button class="btn-preset" onclick="setPreset('vocal')">Vocal</button>
+        </div>
+
+        <!-- Volume & Boost Control -->
+        <div class="section-title">Master Amplification</div>
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="control-label">Volume Boost (Gain): <span id="boostVal">1.0x</span></div>
+                <input type="range" id="boostRange" min="1" max="10" step="0.1" value="1">
+            </div>
+            <div class="control-row" style="margin-top: 10px;">
+                <div class="control-label">Playback Speed: <span id="speedVal">1.0x</span></div>
+                <input type="range" id="speedRange" min="0.5" max="2.0" step="0.1" value="1">
+            </div>
+        </div>
+
+        <!-- 5-Band Equalizer (Mobile Friendly) -->
+        <div class="section-title">Graphic Equalizer (EQ)</div>
+        <div class="control-panel">
+            <div class="eq-container">
+                <div class="eq-band">
+                    <span>60Hz</span>
+                    <input type="range" class="eq-slider" data-index="0" min="-15" max="15" step="1" value="0">
+                </div>
+                <div class="eq-band">
+                    <span>230Hz</span>
+                    <input type="range" class="eq-slider" data-index="1" min="-15" max="15" step="1" value="0">
+                </div>
+                <div class="eq-band">
+                    <span>910Hz</span>
+                    <input type="range" class="eq-slider" data-index="2" min="-15" max="15" step="1" value="0">
+                </div>
+                <div class="eq-band">
+                    <span>4kHz</span>
+                    <input type="range" class="eq-slider" data-index="3" min="-15" max="15" step="1" value="0">
+                </div>
+                <div class="eq-band">
+                    <span>14kHz</span>
+                    <input type="range" class="eq-slider" data-index="4" min="-15" max="15" step="1" value="0">
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Effects -->
+        <div class="section-title">Audio FX & Effects</div>
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="control-label">3D Surround Width: <span id="stereoVal">0%</span></div>
+                <input type="range" id="stereoRange" min="0" max="100" step="1" value="0">
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-buttons">
+            <button class="btn-action btn-secondary" onclick="toggleVisualizer()" id="visToggleBtn">ปิด Visualizer</button>
+            <button class="btn-action" onclick="exportAudio()">ดาวน์โหลดไฟล์</button>
+        </div>
+    </div>
+
+    <script>
+        const audioFile = document.getElementById('audioFile');
+        const audioPlayer = document.getElementById('audioPlayer');
+        const fileNameDiv = document.getElementById('fileName');
+        
+        const boostRange = document.getElementById('boostRange');
+        const boostVal = document.getElementById('boostVal');
+        const speedRange = document.getElementById('speedRange');
+        const speedVal = document.getElementById('speedVal');
+        const stereoRange = document.getElementById('stereoRange');
+        const stereoVal = document.getElementById('stereoVal');
+        
+        const canvas = document.getElementById('visualizer');
+        const canvasCtx = canvas.getContext('2d');
+        const eqSliders = document.querySelectorAll('.eq-slider');
+
+        let audioContext, sourceNode, gainNode, compressorNode, analyserNode, stereoPanner;
+        let eqFilters = [];
+        let isInitialized = false;
+        let isVisualizerActive = true;
+
+        // Load File
+        audioFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileNameDiv.textContent = file.name;
+                audioPlayer.src = URL.createObjectURL(file);
+                audioPlayer.load();
+            }
+        });
+
+        audioPlayer.addEventListener('play', () => {
+            if (!isInitialized) initAudio();
+            if (audioContext.state === 'suspended') audioContext.resume();
+        });
+
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                sourceNode = audioContext.createMediaElementSource(audioPlayer);
+                
+                gainNode = audioContext.createGain();
+                compressorNode = audioContext.createDynamicsCompressor();
+                analyserNode = audioContext.createAnalyser();
+                analyserNode.fftSize = 128;
+
+                // Stereo Panner / Surround simulation check
+                if (audioContext.createStereoPanner) {
+                    stereoPanner = audioContext.createStereoPanner();
+                }
+
+                // Setup 5-Band EQ Frequencies
+                const frequencies = [60, 230, 910, 4000, 14000];
+                eqFilters = frequencies.map(freq => {
+                    const filter = audioContext.createBiquadFilter();
+                    filter.type = 'peaking';
+                    filter.frequency.value = freq;
+                    filter.gain.value = 0;
+                    filter.Q.value = 1;
+                    return filter;
+                });
+
+                // Connect Chain: Source -> EQ1 -> EQ2 -> EQ3 -> EQ4 -> EQ5 -> Gain -> Compressor -> Analyser -> Destination
+                let lastNode = sourceNode;
+                eqFilters.forEach(filter => {
+                    lastNode.connect(filter);
+                    lastNode = filter;
+                });
+
+                lastNode.connect(gainNode);
+                gainNode.connect(compressorNode);
+                
+                if (stereoPanner) {
+                    compressorNode.connect(stereoPanner);
+                    stereoPanner.connect(analyserNode);
+                } else {
+                    compressorNode.connect(analyserNode);
+                }
+                
+                analyserNode.connect(audioContext.destination);
+
+                isInitialized = true;
+                visualize();
+            } catch (e) {
+                console.error("Web Audio API Error:", e);
+            }
+        }
+
+        // Controls Event Listeners
+        boostRange.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            boostVal.textContent = val.toFixed(1) + 'x';
+            if (gainNode) gainNode.gain.value = val;
+        });
+
+        speedRange.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            speedVal.textContent = val.toFixed(1) + 'x';
+            audioPlayer.playbackRate = val;
+        });
+
+        stereoRange.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            stereoVal.textContent = val + '%';
+            if (stereoPanner) {
+                // จำลองสเตอริโอเอฟเฟกต์เบื้องต้นผ่าน Pan
+                stereoPanner.pan.value = (val / 100) * 0.5;
+            }
+        });
+
+        eqSliders.forEach(slider => {
+            slider.addEventListener('input', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                const val = parseFloat(e.target.value);
+                if (eqFilters[index]) {
+                    eqFilters[index].gain.value = val;
+                }
+            });
+        });
+
+        // Presets Logic
+        function setPreset(type) {
+            document.querySelectorAll('.btn-preset').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const presets = {
+                flat: [0, 0, 0, 0, 0],
+                bass: [10, 6, 0, -2, -4],
+                edm: [8, 4, -2, 4, 8],
+                vocal: [-2, 2, 8, 4, 0]
+            };
+
+            const values = presets[type];
+            eqSliders.forEach((slider, i) => {
+                slider.value = values[i];
+                if (eqFilters[i]) eqFilters[i].gain.value = values[i];
+            });
+        }
+
+        // Visualizer Loop
+        function visualize() {
+            const bufferLength = analyserNode.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+
+            function draw() {
+                requestAnimationFrame(draw);
+                if (!isVisualizerActive) return;
+
+                analyserNode.getByteFrequencyData(dataArray);
+
+                canvasCtx.fillStyle = '#030712';
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 2.5;
+                let x = 0;
+
+                for (let i = 0; i < bufferLength; i++) {
+                    let barHeight = dataArray[i] / 1.5;
+
+                    let gradient = canvasCtx.createLinearGradient(0, canvas.height, 0, 0);
+                    gradient.addColorStop(0, '#00f2fe');
+                    gradient.addColorStop(1, '#4facfe');
+
+                    canvasCtx.fillStyle = gradient;
+                    canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                    x += barWidth + 2;
+                }
+            }
+            draw();
+        }
+
+        function toggleVisualizer() {
+            isVisualizerActive = !isVisualizerActive;
+            const btn = document.getElementById('visToggleBtn');
+            if (isVisualizerActive) {
+                btn.textContent = "ปิด Visualizer";
+                btn.style.background = "#1f2937";
+                btn.style.color = "var(--text-main)";
+            } else {
+                btn.textContent = "เปิด Visualizer";
+                btn.style.background = "#374151";
+                btn.style.color = "var(--text-muted)";
+                canvasCtx.fillStyle = '#030712';
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
+        function exportAudio() {
+            alert("ระบบจำลอง: ฟีเจอร์นี้สำหรับดาวน์โหลดไฟล์ที่ประมวลผลผ่าน Gain & EQ เต็มรูปแบบ (ต้องใช้ OfflineAudioContext ในการเรนเดอร์ไฟล์ออกเป็น WAV)");
+        }
+    </script>
+</body>
+  </html>
+
