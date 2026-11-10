@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIG888 - OFFICIAL VIP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ANIMATED MOVING BACKGROUND */
+        .bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-glow-1 {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, rgba(255, 136, 0, 0.08) 45%, transparent 70%);
+            top: -150px;
+            left: -100px;
+            filter: blur(60px);
+            z-index: 0;
+            animation: moveGlow1 12s infinite alternate ease-in-out;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 68, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 50%, transparent 70%);
+            bottom: -100px;
+            right: -100px;
+            filter: blur(65px);
+            z-index: 0;
+            animation: moveGlow2 15s infinite alternate ease-in-out;
+        }
+
+        .bg-glow-center {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 230, 0, 0.12) 0%, transparent 60%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(50px);
+            z-index: 0;
+            animation: pulseCenter 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveGlow1 {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(150px, 100px) scale(1.2); }
+            100% { transform: translate(80px, 200px) scale(0.9); }
+        }
+
+        @keyframes moveGlow2 {
+            0% { transform: translate(0, 0) scale(0.9); }
+            50% { transform: translate(-120px, -80px) scale(1.15); }
+            100% { transform: translate(-50px, -150px) scale(1); }
+        }
+
+        @keyframes pulseCenter {
+            0% { opacity: 0.4; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.3); }
+        }
+
+        /* GLASSMORPHISM CARD CONTAINER */
+        .main-card {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(28, 28, 30, 0.85) 0%, rgba(12, 12, 14, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 28px;
+            padding: 35px 30px 25px 30px;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
+                        0 0 30px rgba(255, 215, 0, 0.15),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .main-card:hover {
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9),
+                        0 0 40px rgba(255, 215, 0, 0.25);
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .logo-title {
+            font-size: 52px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(180deg, #ffffff 0%, #ffe600 35%, #ff9900 70%, #b35900 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(255, 169, 0, 0.5);
+            line-height: 1;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ff0055, #ff5500);
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+            margin-top: 8px;
+        }
+
+        /* TAB SWITCHER */
+        .tab-container {
+            display: flex;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #ffe600 0%, #ff8800 100%);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
+        }
+
+        /* FORM STYLES */
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #d4af37;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            font-size: 18px;
+            color: #888;
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 16px 13px 48px;
+            background: rgba(15, 15, 18, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 400;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-control:focus {
+            border-color: #ffd700;
+            background: rgba(25, 25, 30, 1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .form-control:focus + .input-icon {
+            color: #ffd700;
+        }
+
+        .toggle-visibility {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+
+        .toggle-visibility:hover {
+            color: #ffd700;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffe600 0%, #ff8800 50%, #d45500 100%);
+            border: none;
+            border-radius: 14px;
+            color: #000000;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 136, 0, 0.4), 0 0 10px rgba(255, 230, 0, 0.2);
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: rotate(30deg);
+            transition: 0.8s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 136, 0, 0.6), 0 0 20px rgba(255, 230, 0, 0.4);
+        }
+
+        .btn-submit:hover::after {
+            left: 100%;
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(255, 136, 0, 0.4);
+        }
+
+        .status-msg {
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 10px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(255, 77, 77, 0.12);
+            border: 1px solid rgba(255, 77, 77, 0.4);
+            color: #ff6b6b;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: rgba(0, 255, 204, 0.12);
+            border: 1px solid rgba(0, 255, 204, 0.4);
+            color: #00ffcc;
+        }
+
+        /* MAIN HOME PAGE (หน้าหลัก - ซ่อนอยู่เริ่มต้น) */
+        .home-page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+            padding: 20px 0;
+        }
+
+        .home-page.active {
+            display: block;
+        }
+
+        .user-welcome-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 15px;
+        }
+
+        .user-welcome-card h2 {
+            font-size: 22px;
+            color: #ffd700;
+            margin-bottom: 8px;
+        }
+
+        .user-welcome-card p {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        /* BANNER PROMOTION */
+        .promo-banner {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 8px 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .promo-tag {
+            background: linear-gradient(135deg, #ff0055, #ff5500);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-right: 10px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            box-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
+        }
+
+        .marquee-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            font-size: 13px;
+            color: #e0e0e0;
+            font-weight: 400;
+            padding-left: 100%;
+            animation: marquee 16s linear infinite;
+        }
+
+        .marquee-text span {
+            color: #ffd700;
+            font-weight: 700;
+        }
+
+        @keyframes marquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-glow-1"></div>
+<div class="bg-glow-2"></div>
+<div class="bg-glow-center"></div>
+<canvas id="particleCanvas" class="bg-canvas"></canvas>
+
+<div class="main-card">
+    <div class="logo-container">
+        <div class="logo-title">BIG888</div>
+        <br>
+        <div class="logo-badge" id="badgeStatus">OFFICIAL VIP</div>
+    </div>
+
+    <!-- ส่วนที่ 1: ระบบล็อกอิน / สมัคร (AUTH SECTION) -->
+    <div id="authSection">
+        <div class="tab-container">
+            <button class="tab-btn active" id="loginTabBtn" onclick="switchTab('login')">เข้าสู่ระบบ</button>
+            <button class="tab-btn" id="regTabBtn" onclick="switchTab('register')">สมัครสมาชิก</button>
+        </div>
+
+        <!-- หน้าลงชื่อเข้าใช้ -->
+        <div id="loginSection" class="form-section active">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginPhone">เบอร์โทรศัพท์</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="loginPhone" class="form-control phone-input" placeholder="08X-XXX-XXXX" maxlength="12" required autocomplete="off">
+                        <span class="input-icon">📱</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loginPassword">รหัสผ่าน</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="กรอกรหัสผ่าน" required autocomplete="off">
+                        <span class="input-icon">🔑</span>
+                        <button type="button" class="toggle-visibility" onclick="toggleVisibility('loginPassword', this)">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">เข้าสู่ระบบ</button>
+            </form>
+        </div>
+
+        <!-- หน้าสมัครสมาชิก -->
+        <div id="registerSection" class="form-section">
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="phone">1. เบอร์โทรศัพท์</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="phone" class="form-control phone-input" placeholder="08X-XXX-XXXX" maxlength="12" required autocomplete="off">
+                        <span class="input-icon">📱</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">2. รหัสผ่าน</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" class="form-control" placeholder="ตั้งรหัสผ่านของคุณ" required autocomplete="off">
+                        <span class="input-icon">🔑</span>
+                        <button type="button" class="toggle-visibility" onclick="toggleVisibility('password', this)">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">3. ยืนยันรหัสผ่าน</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="กรอกรหัสผ่านอีกครั้ง" required autocomplete="off">
+                        <span class="input-icon">🔒</span>
+                        <button type="button" class="toggle-visibility" onclick="toggleVisibility('confirmPassword', this)">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pinCode">4. รหัส 6 ตัวกันลืม (PIN)</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="pinCode" class="form-control" placeholder="ตัวเลข 6 หลัก (เช่น 123456)" maxlength="6" pattern="[0-9]{6}" required autocomplete="off">
+                        <span class="input-icon">🔢</span>
+                        <button type="button" class="toggle-visibility" onclick="toggleVisibility('pinCode', this)">👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">สมัครสมาชิก</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ส่วนที่ 2: หน้าหลัก (HOME PAGE) -->
+    <div id="homePage" class="home-page">
+        <div class="user-welcome-card">
+            <h2 id="homeWelcomeTitle">ยินดีต้อนรับสู่หน้าหลัก</h2>
+            <p id="homeUserPhone">สมาชิก IP ถาวร</p>
+        </div>
+    </div>
+
+    <div id="statusMsg" class="status-msg"></div>
+
+    <!-- โฆษณาสไลด์ขวาไปซ้าย -->
+    <div class="promo-banner">
+        <span class="promo-tag">ประกาศ</span>
+        <div class="marquee-wrapper">
+            <div class="marquee-text">
+                🔥 ยินดีต้อนรับเข้าสู่ <span>BIG888</span> เว็บตรงอันดับ 1 💎 สมัครใหม่รับโบนัส <span>100% ทันที</span> ✨ ระบบออโต้ฝาก-ถอนไวภายใน 3 วินาที 🚀 แจ็คพอตแตกง่าย อัปเดตเกมใหม่ทุกสัปดาห์!
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Canvas Particle Setup
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = canvas.height + Math.random() * 50;
+            this.size = Math.random() * 2.5 + 0.5;
+            this.speedY = Math.random() * 0.8 + 0.2;
+            this.opacity = Math.random() * 0.7 + 0.2;
+        }
+        update() {
+            this.y -= this.speedY;
+            if (this.y < -10) this.reset();
+        }
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#ffd700';
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+
+    for (let i = 0; i < 40; i++) particles.push(new Particle());
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ดึง IP เครื่อง & ตรวจสอบการออโต้เข้าหน้าหลัก
+    let currentIP = "UNKNOWN";
+
+    window.addEventListener('DOMContentLoaded', () => {
+        fetch('https://api.ipify.org?format=json')
+            .then(res => res.json())
+            .then(data => { 
+                currentIP = data.ip; 
+                autoCheckAndRedirect();
+            })
+            .catch(() => { 
+                currentIP = "LOCAL_DEVICE"; 
+                autoCheckAndRedirect();
+            });
+    });
+
+    // ตรวจสอบว่า IP นี้เคยสมัครไว้แล้วหรือไม่ ถ้าเคย ให้เด้งเข้าหน้าหลักทันที!
+    function autoCheckAndRedirect() {
+        let registeredUsers = JSON.parse(localStorage.getItem('BIG888_USERS') || '{}');
+        for (let phone in registeredUsers) {
+            if (registeredUsers[phone].ip === currentIP) {
+                // เคยสมัครแล้ว! พาส่งไปหน้าหลักทันทีโดยไม่ต้องผ่านหน้าล็อกอิน
+                showHomePage(registeredUsers[phone]);
+                return;
+            }
+        }
+    }
+
+    // ฟังก์ชันเปิดแสดงหน้าหลัก
+    function showHomePage(userData) {
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('statusMsg').style.display = 'none';
+        document.getElementById('badgeStatus').innerText = "MEMBER LOBBY";
+        
+        const phone = userData.phone;
+        const displayPhone = `${phone.substring(0,3)}****${phone.substring(7)}`;
+        
+        document.getElementById('homeWelcomeTitle').innerText = `ยินดีต้อนรับคุณ ${displayPhone}`;
+        document.getElementById('homeUserPhone').innerText = `เข้าใช้งานสำเร็จด้วย IP: ${userData.ip}`;
+        
+        document.getElementById('homePage').classList.add('active');
+    }
+
+    // ฟอร์แมตเบอร์โทรศัพท์ขณะพิมพ์
+    document.querySelectorAll('.phone-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length > 10) val = val.substring(0, 10);
+            if (val.length > 6) {
+                val = val.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            } else if (val.length > 3) {
+                val = val.replace(/(\d{3})(\d{1,3})/, '$1-$2');
+            }
+            e.target.value = val;
+        });
+    });
+
+    const pinInput = document.getElementById('pinCode');
+    pinInput.addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 6);
+    });
+
+    function switchTab(tab) {
+        document.getElementById('statusMsg').style.display = 'none';
+        if (tab === 'login') {
+            document.getElementById('loginTabBtn').classList.add('active');
+            document.getElementById('regTabBtn').classList.remove('active');
+            document.getElementById('loginSection').classList.add('active');
+            document.getElementById('registerSection').classList.remove('active');
+        } else {
+            document.getElementById('regTabBtn').classList.add('active');
+            document.getElementById('loginTabBtn').classList.remove('active');
+            document.getElementById('registerSection').classList.add('active');
+            document.getElementById('loginSection').classList.remove('active');
+        }
+    }
+
+    function toggleVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerText = "🔒";
+        } else {
+            input.type = "password";
+            btn.innerText = "👁️";
+        }
+    }
+
+    function showMessage(text, isError) {
+        const msgBox = document.getElementById('statusMsg');
+        msgBox.innerText = text;
+        msgBox.className = isError ? "status-msg error" : "status-msg success";
+    }
+
+    // ระบบสมัครสมาชิก
+    function handleRegister(e) {
+        e.preventDefault();
+
+        const rawPhone = document.getElementById('phone').value.replace(/\D/g, '');
+        const pass = document.getElementById('password').value;
+        const confirmPass = document.getElementById('confirmPassword').value;
+        const pin = pinInput.value;
+
+        if (rawPhone.length !== 10) {
+            showMessage("กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก", true);
+            return;
+        }
+
+        if (pass !== confirmPass) {
+            showMessage("รหัสผ่าน และ ยืนยันรหัสผ่าน ไม่ตรงกัน!", true);
+            return;
+        }
+
+        if (pin.length !== 6) {
+            showMessage("กรุณากรอกรหัสกันลืม (PIN) ให้ครบ 6 หลัก", true);
+            return;
+        }
+
+        let registeredUsers = JSON.parse(localStorage.getItem('BIG888_USERS') || '{}');
+
+        if (registeredUsers[rawPhone]) {
+            showMessage("เบอร์นี้เคยสมัครแล้ว กรุณากดเข้าสู่ระบบ", true);
+            switchTab('login');
+            return;
+        }
+
+        // เซฟข้อมูลใหม่ผูกกับ IP เครื่อง
+        const newUser = {
+            phone: rawPhone,
+            pass: pass,
+            pin: pin,
+            ip: currentIP,
+            registeredAt: new Date().toISOString()
+        };
+
+        registeredUsers[rawPhone] = newUser;
+        localStorage.setItem('BIG888_USERS', JSON.stringify(registeredUsers));
+
+        // สมัครเสร็จแล้ว เข้าหน้าหลักทันที
+        showHomePage(newUser);
+    }
+
+    // ระบบลงชื่อเข้าใช้
+    function handleLogin(e) {
+        e.preventDefault();
+
+        const rawPhone = document.getElementById('loginPhone').value.replace(/\D/g, '');
+        const pass = document.getElementById('loginPassword').value;
+
+        if (rawPhone.length !== 10) {
+            showMessage("กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก", true);
+            return;
+        }
+
+        let registeredUsers = JSON.parse(localStorage.getItem('BIG888_USERS') || '{}');
+        const user = registeredUsers[rawPhone];
+
+        if (!user) {
+            showMessage("ไม่พบบัญชีนี้ในระบบ กรุณาสมัครสมาชิกก่อน", true);
+            return;
+        }
+
+        if (user.ip !== currentIP) {
+            showMessage("ไม่อนุญาต! บัญชีนี้ถูกสมัครด้วยอุปกรณ์เครื่องอื่น", true);
+            return;
+        }
+
+        if (user.pass !== pass) {
+            showMessage("รหัสผ่านไม่ถูกต้อง!", true);
+            return;
+        }
+
+        // ล็อกอินสำเร็จ เข้าหน้าหลักทันที
+        showHomePage(user);
+    }
+</script>
+
+</body>
+</html>
